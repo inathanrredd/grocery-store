@@ -86,7 +86,7 @@ function App() {
       {cartItems.map( item => (
         <div key={item.id}>
             <p>
-              {getItemName(item.id)}  {getItemPrice(item.id)} {item.quantity} 
+              {item.name},{item.quantity} 
               <button onClick={e => addToCart(item)}>Remove from Cart</button>
             </p>
           
