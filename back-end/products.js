@@ -96,7 +96,7 @@ app.post('/api/cart/:id', (req,res) => {
     });
     let index2 = cartMap.indexOf(id);
     if (index2 === -1) {
-        let product = products[id]
+        let product = products[index]
         let item = {
             id: id,
             quantity: q,

@@ -47,6 +47,27 @@ function App() {
       setError("error adding product to cart" + error);
     }
   }
+  
+  const decreaseItemQuantity = async(item) => {
+    try {
+      if (item.quantity <= 1) {
+        removeFromCart(item);
+      }
+      else {
+        await axios.put("/api/cart/" + item.id + "/" + (item.quantity-1), item);
+      }
+    } catch(error) {
+      setError("error decreasing quantity in cart" + error);
+    }
+  }
+  
+  const fromCart = async(item) => {
+    try {
+      await axios.delete("/api/cart/" + item.id, item);
+    } catch(error) {
+      setError("error removing product from cart" + error);
+    }
+  }
 
   // fetch ticket data
   useEffect(() => {
@@ -69,15 +90,23 @@ function App() {
     await toCart(product);
     fetchCart();
   }
-  const getItemName = async(id) => {
-    const response = await axios.get("/api/products/" + id); //I think this is breaking it
-    return response.data.name;
+  const decreaseQuantity = async(item) => {
+    await decreaseItemQuantity(item);
+    fetchCart();
   }
+  const removeFromCart = async(item) => {
+    await fromCart(item);
+    fetchCart();
+  }
+  // const getItemName = async(id) => {
+  //   const response = await axios.get("/api/products/" + id); //I think this is breaking it
+  //   return response.data.name;
+  // }
   
-  const getItemPrice = async(id) => {
-  const response = await axios.get("/api/products/" + id);  //I think this is breaking it
-  return response.data.price;
-  }
+  // const getItemPrice = async(id) => {
+  // const response = await axios.get("/api/products/" + id);  //I think this is breaking it
+  // return response.data.price;
+  // }
   // render results
   return (
     <div className="App">
@@ -87,7 +116,9 @@ function App() {
         <div key={item.id}>
             <p>
               {item.name},{item.quantity} 
-              <button onClick={e => addToCart(item)}>Remove from Cart</button>
+              <button onClick={e => decreaseQuantity(item)}>-</button>
+              <button onClick={e => addToCart(item)}>+</button>
+              <button onClick={e => removeFromCart(item)}>Remove from Cart</button>
             </p>
           
         </div>
